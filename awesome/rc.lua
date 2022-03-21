@@ -51,6 +51,31 @@ local function run_once(cmd_arr)
 	end
 end
 
+-- This function will run once every time Awesome is started
+local border_on = true
+local border_focus_width = 2
+local border_focus_color = "#cc241d"
+
+local function toggle_borders()
+  if border_on then
+    border_focus_width = 0
+    border_on = false
+  else
+    border_focus_width = 4
+    border_on = true
+  end
+end
+
+local function toggle_picture()
+  if border_on then
+    border_focus_width = 0
+    border_on = false
+  else
+    border_focus_width = 4
+    border_on = true
+  end
+end
+
 run_once({ "unclutter -root" }) -- comma-separated entries
 
 -- {{{ Variable definitions
@@ -98,7 +123,7 @@ end)
 
 -- }}}
 
--- {{{ Key bindings
+-- {{{ Keybindings
 
 globalkeys = mytable.join(
 	-- Destroy all notifications
@@ -187,6 +212,11 @@ globalkeys = mytable.join(
 			end
 		end
 	end, { description = "toggle wibox", group = "awesome" }),
+
+  --hide focus borders
+	awful.key({ modkey, "Shift"}, "x", function ()
+    toggle_borders()
+	end),
 
 	-- On-the-fly useless gaps change
 	awful.key({ modkey, "Control" }, "+", function()
@@ -598,7 +628,9 @@ client.connect_signal("mouse::enter", function(c)
 end)
 
 client.connect_signal("focus", function(c)
-	c.border_color = beautiful.border_focus
+	-- c.border_color = beautiful.border_focus
+	c.border_width = border_focus_width
+  c.border_color = border_focus_color
 end)
 client.connect_signal("unfocus", function(c)
 	c.border_color = beautiful.border_normal
@@ -612,6 +644,8 @@ client.connect_signal("property::class", function(c)
 	end
 end)
 
+
+
 -- }}}
 -- Hide wiboxes by default
 for s in screen do
@@ -621,8 +655,13 @@ for s in screen do
 	end
 end
 
-awful.spawn.with_shell("feh --bg-scale ~/Pictures/wallpapers/2.jpg")
-awful.spawn.with_shell("xset r rate 285 25")
+awful.spawn.with_shell("feh --bg-scale ~/Pictures/wallpapers/7.webp")
+awful.spawn.with_shell("xset r rate 320 25")
 -- awful.tag.incmwfact(-0.05)
 
+beautiful.useless_gap = 3
 scratchpad.start()
+
+-- Change scratchpad layout
+local scratchpad = awful.tag.find_by_name(awful.screen.focused(), "scratch")
+awful.layout.set(lain.layout.centerwork, scratchpad)

@@ -1,20 +1,54 @@
 -- General
-lvim.log.level = "warn"
 lvim.format_on_save = true
-lvim.colorscheme = "catppuccin"
+-- lvim.colorscheme = "moonfly"
+-- lvim.colorscheme = "github_dark_default"
+-- lvim.colorscheme = "irblack"
+-- lvim.colorscheme = "blue-moon"
+lvim.colorscheme = "gruvbox-material"
+-- lvim.colorscheme = "base16-irblack"
+-- lvim.colorscheme = "catppuccin"
 lvim.leader = "space"
+lvim.lsp.diagnostics.virtual_text = true
 
 -- Keybindings
 lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
+
+P = function(v)
+  print(vim.inspect(v))
+  return v
+end
+
+RELOAD = function (...)
+  return require("plenary.reload").reload_module(...)
+end
+
+R = function (name)
+  RELOAD(name)
+  return require(name)
+end
+
+  -- map w <Nop>
 vim.cmd([[
   cmap w!! w !sudo tee %
 
   map J <Nop>
 
-  noremap Y y$
-  noremap yy Y
-  noremap V v$
-  noremap vv V
+  onoremap w e
+  vnoremap w e
+  onoremap W E
+  vnoremap W E
+
+  nnoremap Y y$
+  nnoremap yy Y
+  nnoremap V v$
+  nnoremap vv V
+  nnoremap c <Nop>
+  vnoremap c <Nop>
+
+  noremap <C-f> <C-f>zz
+  noremap <C-b> <C-b>zz
+  noremap <C-d> <C-d>zz
+  noremap <C-u> <C-u>zz
 
   set clipboard+=unnamedplus
 
@@ -24,10 +58,14 @@ vim.cmd([[
   omap gs <cmd>Pounce<CR>  " 's' is used by vim-surround
 ]])
 
+-- vim.api.nvim_set_keymap("n", w, BetterW())
+
 -- Autocommands
 lvim.autocommands.custom_groups = {
+  { "BufWinEnter", "*.lua", "setlocal ts=8 sw=8" },
    { "InsertEnter", "*", ":normal zz" },
 }
+
 
 -- Whichkey
 lvim.builtin.which_key.mappings["t"] = {
@@ -45,19 +83,25 @@ lvim.builtin.which_key.mappings["S"]= {
   l = { "<cmd>lua require('persistence').load({ last = true })<cr>", "Restore last session" },
   Q = { "<cmd>lua require('persistence').stop()<cr>", "Quit without saving session" },
 }
+lvim.builtin.which_key.mappings["be"]= {
+  "<cmd>BufferLineCloseLeft<cr><cmd>BufferLineCloseRight<cr>", "Close all other buffers"
+}
 
 lvim.builtin.dashboard.active = true
 lvim.builtin.terminal.active = true
 lvim.builtin.nvimtree.setup.view.side = "left"
 lvim.builtin.nvimtree.show_icons.git = 0
 lvim.builtin.treesitter.highlight.enabled = true
+lvim.builtin.treesitter.autotag.enable = true
+lvim.builtin.treesitter.matchup.enable = true
+lvim.builtin.treesitter.rainbow.enable = true
+lvim.builtin.treesitter.textsubjects.enable = true
 
 -- Formatters
 local formatters = require "lvim.lsp.null-ls.formatters"
 formatters.setup {
   {
     exe = "prettier",
-    {"folke/tokyonight.nvim"},
     args = { '--print-with=100', '--single-quote=true' },
   },
 }
@@ -228,4 +272,37 @@ lvim.plugins = {
   {"Pocco81/AbbrevMan.nvim"},
   {"max397574/better-escape.nvim"},
   {"kdheepak/lazygit.nvim"},
+  {"gpanders/nvim-parinfer"},
+  {"kyazdani42/blue-moon"},
+  {"sainnhe/gruvbox-material"},
+  {"ellisonleao/gruvbox.nvim"},
+  {"savq/melange"},
+  {"ThePrimeagen/refactoring.nvim"},
+  {"terryma/vim-multiple-cursors"},
+  {"projekt0n/github-nvim-theme"},
+  {"yashguptaz/calvera-dark.nvim"},
+  {"vigoux/oak"},
+  {"bluz71/vim-moonfly-colors"},
+  {"marko-cerovac/material.nvim"},
+  {"RRethy/nvim-base16"},
+  {"my_plugins/testing"},
+}
+
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = "python",
+  highlight = {
+   enable = true,
+  },
+  indent = {
+    enable = true,
+  },
+  incremental_selection = {
+    enable = true,
+    keymaps = {
+      init_selection = "c",
+      node_incremental = "c",
+      scope_incremental = "grc",
+      node_decremental = "grm",
+    },
+  },
 }
