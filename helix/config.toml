@@ -1,0 +1,19 @@
+theme = "onedark"
+
+[editor]
+scrolloff = 10
+shell = ["fish", "-c"]
+true-color = true
+
+[editor.cursor-shape]
+insert = "bar"
+
+[keys.insert]
+j = { k = "normal_mode" }
+k = { j = "normal_mode" }
+
+[keys.normal]
+v = { v = ["select_mode", "extend_line"] }
+V = ["select_mode", "goto_line_end"]
+D = ["select_mode", "goto_line_end", "delete_selection"]
+Y = ["select_mode", "goto_line_end", "yank"]
