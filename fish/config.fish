@@ -16,3 +16,5 @@ end
 
 function fish_mode_prompt
 end
+
+thefuck --alias | source

@@ -29,28 +29,28 @@ M.hi_colors = function()
   return colors
 end
 
-M.telescope_theme = function()
-  local function set_bg(group, bg)
-    vim.cmd("hi " .. group .. " guibg=" .. bg)
-  end
-
-  local function set_fg_bg(group, fg, bg)
-    vim.cmd("hi " .. group .. " guifg=" .. fg .. " guibg=" .. bg)
-  end
-
-  local colors = M.hi_colors()
-  set_fg_bg("TelescopeBorder", colors.bg_alt, colors.bg)
-  set_fg_bg("TelescopePromptBorder", colors.bg, colors.bg)
-  set_fg_bg("TelescopePromptNormal", colors.fg, colors.bg_alt)
-  set_fg_bg("TelescopePromptPrefix", colors.red, colors.bg)
-  set_fg_bg("TelescopePreviewTitle", colors.bg, colors.green)
-  set_fg_bg("TelescopePromptTitle", colors.bg, colors.red)
-  set_fg_bg("TelescopeResultsTitle", colors.bg, colors.bg)
-  set_fg_bg("TelescopeResultsBorder", colors.bg, colors.bg)
-  set_fg_bg("LvimInfoHeader", colors.bg, colors.green)
-  set_fg_bg("LvimInfoIdentifier", colors.red, colors.bg_alt)
-  set_bg("TelescopeSelection", colors.bg_alt)
-  set_bg("TelescopeNormal", colors.bg)
-end
+-- M.Telescope_theme = function()
+--   local function set_bg(group, bg)
+--     vim.cmd("hi " .. group .. " guibg=" .. bg)
+--   end
+--
+--   local function set_fg_bg(group, fg, bg)
+--     vim.cmd("hi " .. group .. " guifg=" .. fg .. " guibg=" .. bg)
+--   end
+--
+--   local colors = M.hi_colors()
+--   set_fg_bg("TelescopeBorder", colors.bg_alt, colors.bg)
+--   set_fg_bg("TelescopePromptBorder", colors.bg, colors.bg)
+--   set_fg_bg("TelescopePromptNormal", colors.fg, colors.bg_alt)
+--   set_fg_bg("TelescopePromptPrefix", colors.red, colors.bg)
+--   set_fg_bg("TelescopePreviewTitle", colors.bg, colors.green)
+--   set_fg_bg("TelescopePromptTitle", colors.bg, colors.red)
+--   set_fg_bg("TelescopeResultsTitle", colors.bg, colors.bg)
+--   set_fg_bg("TelescopeResultsBorder", colors.bg, colors.bg)
+--   set_fg_bg("LvimInfoHeader", colors.bg, colors.green)
+--   set_fg_bg("LvimInfoIdentifier", colors.red, colors.bg_alt)
+--   set_bg("TelescopeSelection", colors.bg_alt)
+--   set_bg("TelescopeNormal", colors.bg)
+-- end
 
 return M

@@ -10,4 +10,16 @@ config.load_autoconfig()
 #     }
 # })
 
-config.source('gruvbox.py')
+# config.source('gruvbox.py')
+
+import dracula.draw
+
+# Load existing settings made via :set
+config.load_autoconfig()
+
+dracula.draw.blood(c, {
+    'spacing': {
+        'vertical': 6,
+        'horizontal': 8
+    }
+})

@@ -1,4 +1,5 @@
 pcall(require, "luarocks.loader")
+local keyboard_layout = require("keyboard_layout")
 
 local scratchpad = require("scratchpad")
 
@@ -14,6 +15,13 @@ local freedesktop = require("freedesktop")
 local hotkeys_popup = require("awful.hotkeys_popup")
 require("awful.hotkeys_popup.keys")
 local mytable = awful.util.table or gears.table -- 4.{0,1} compatibility
+
+local kbdcfg = keyboard_layout.kbdcfg({type = "gui"})
+
+kbdcfg.add_primary_layout("English", "US", "us")
+kbdcfg.add_primary_layout("Swedish", "SE", "se")
+
+kbdcfg.bind()
 
 if awesome.startup_errors then
 	naughty.notify({
@@ -51,29 +59,39 @@ local function run_once(cmd_arr)
 	end
 end
 
+local function toggle_keyboard_layout_helper()
+
+  awful.spawn.with_shell("marktext ~/Documents/keyboard_layout_view.md ")
+	-- awful.client.run_or_raise("marktext", function(c)
+	-- 	return awful.rules.match(c, { class = "Cudatext" })
+	-- end, function(c)
+	-- 	c:move_to_tag(awful.screen.focused().selected_tag)
+	-- end)
+end
+
 -- This function will run once every time Awesome is started
 local border_on = true
-local border_focus_width = 2
-local border_focus_color = "#cc241d"
+local border_focus_width = 3
+local border_focus_color = "#bdedff"
 
 local function toggle_borders()
-  if border_on then
-    border_focus_width = 0
-    border_on = false
-  else
-    border_focus_width = 4
-    border_on = true
-  end
+	if border_on then
+		border_focus_width = 0
+		border_on = false
+	else
+		border_focus_width = 4
+		border_on = true
+	end
 end
 
 local function toggle_picture()
-  if border_on then
-    border_focus_width = 0
-    border_on = false
-  else
-    border_focus_width = 4
-    border_on = true
-  end
+	if border_on then
+		border_focus_width = 0
+		border_on = false
+	else
+		border_focus_width = 4
+		border_on = true
+	end
 end
 
 run_once({ "unclutter -root" }) -- comma-separated entries
@@ -123,7 +141,7 @@ end)
 
 -- }}}
 
--- {{{ Keybindings
+-- {{{ Keybindings key bindings mappings
 
 globalkeys = mytable.join(
 	-- Destroy all notifications
@@ -136,6 +154,11 @@ globalkeys = mytable.join(
 		awful.spawn("flameshot gui")
 	end, { description = "take a screenshot", group = "hotkeys" }),
 
+	-- Take a screenshot
+	awful.key({ modkey }, "v", function()
+		toggle_keyboard_layout_helper()
+	end, { description = "take a screenshot", group = "hotkeys" }),
+
 	-- Show help
 	awful.key({ modkey, "Shift" }, "s", hotkeys_popup.show_help, { description = "show help", group = "awesome" }),
 
@@ -144,13 +167,14 @@ globalkeys = mytable.join(
 	awful.key({ modkey }, "Right", awful.tag.viewnext, { description = "view next", group = "tag" }),
 	awful.key({ modkey }, "Escape", awful.tag.history.restore, { description = "go back", group = "tag" }),
 
+  -- I need these keys in neovim
 	-- Default client focus
-	awful.key({ altkey }, "j", function()
-		awful.client.focus.byidx(1)
-	end, { description = "focus next by index", group = "client" }),
-	awful.key({ altkey }, "k", function()
-		awful.client.focus.byidx(-1)
-	end, { description = "focus previous by index", group = "client" }),
+	-- awful.key({ altkey }, "j", function()
+	-- 	awful.client.focus.byidx(1)
+	-- end, { description = "focus next by index", group = "client" }),
+	-- awful.key({ altkey }, "k", function()
+	-- 	awful.client.focus.byidx(-1)
+	-- end, { description = "focus previous by index", group = "client" }),
 
 	-- By-direction client focus
 	awful.key({ modkey }, "j", function()
@@ -213,9 +237,9 @@ globalkeys = mytable.join(
 		end
 	end, { description = "toggle wibox", group = "awesome" }),
 
-  --hide focus borders
-	awful.key({ modkey, "Shift"}, "x", function ()
-    toggle_borders()
+	--hide focus borders
+	awful.key({ modkey, "Shift" }, "x", function()
+		toggle_borders()
 	end),
 
 	-- On-the-fly useless gaps change
@@ -308,6 +332,37 @@ globalkeys = mytable.join(
 		beautiful.volume.update()
 	end, { description = "toggle mute", group = "hotkeys" }),
 
+
+
+
+    --awful.key({"Shift"}, "Alt_L", function () kbdcfg.switch_next() end),
+    -- Alt-Shift to change keyboard layout
+    --awful.key({modkey, "Shift", "Control"}, "h", function () kbdcfg.switch_next() end)
+    awful.key({modkey, "Control", "Shift"}, "l", function () kbdcfg.switch_next() end),
+
+-- awful.key({ "Shift" }, "Alt_L", function () mykeyboardlayout.next_layout(); end)
+-- awful.key({ "Mod1" }, "Shift_L", function () mykeyboardlayout.next_layout(); end)
+
+
+  -- WINDOWS COMPATIBE KEYBINDINGS KEY BINDINGS
+	awful.key({ modkey, "Control" }, "Left", awful.tag.viewprev, { description = "view previous", group = "tag" }),
+	awful.key({ modkey, "Control"}, "Right", awful.tag.viewnext, { description = "view next", group = "tag" }),
+	awful.key({ modkey, "Control"}, "Escape", awful.tag.history.restore, { description = "go back", group = "tag" }),
+
+	-- Default client focus
+	awful.key({ altkey }, "Tab", function()
+		awful.client.focus.byidx(1)
+	end, { description = "focus next by index", group = "client" }),
+	awful.key({ altkey, "Shift" }, "Tab", function()
+		awful.client.focus.byidx(-1)
+	end, { description = "focus previous by index", group = "client" }),
+
+
+  -- kill window
+	awful.key({ altkey }, "f4", function()
+		awful.client.focus.byidx(-1)
+	end, { description = "focus previous by index", group = "client" }),
+
 	-- TODO fix media controll
 	-- MPD control
 	-- awful.key({ altkey, "Control" }, "Up", function()
@@ -355,6 +410,9 @@ globalkeys = mytable.join(
 	awful.key({ modkey, "Shift" }, "b", function()
 		awful.spawn(browser2)
 	end, { description = "run browser2", group = "launcher" }),
+	awful.key({ modkey }, "e", function()
+		awful.spawn("nautilus")
+	end, { description = "run file explorer", group = "launcher" }),
 
 	--[[ dmenu
     awful.key({ modkey }, "x", function ()
@@ -374,16 +432,19 @@ globalkeys = mytable.join(
     --]]
 	-- Prompt
 	awful.key({ modkey }, "r", function()
-		os.execute(
-			string.format(
-				"dmenu_run -i -fn 'Monospace' -nb '%s' -nf '%s' -sb '%s' -sf '%s'",
-				beautiful.bg_normal,
-				beautiful.fg_normal,
-				beautiful.bg_focus,
-				beautiful.fg_focus
-			)
-		)
-	end, { description = "run prompt", group = "launcher" })
+    awful.spawn.with_shell("rofi -show run")
+  end)
+	-- awful.key({ modkey }, "r", function()
+	-- 	os.execute(
+	-- 		string.format(
+	-- 			"dmenu_run -i -fn 'Monospace' -nb '%s' -nf '%s' -sb '%s' -sf '%s'",
+	-- 			beautiful.bg_normal,
+	-- 			beautiful.fg_normal,
+	-- 			beautiful.bg_focus,
+	-- 			beautiful.fg_focus
+	-- 		)
+	-- 	)
+	-- end, { description = "run prompt", group = "launcher" })
 )
 
 clientkeys = mytable.join(
@@ -547,6 +608,12 @@ awful.rules.rules = {
 		properties = { floating = true },
 	},
 
+	-- Window for keyboard layout should always be on top
+	{
+		rule = { class = "marktext" },
+		properties = { floating = true, ontop = true },
+	},
+
 	-- Add titlebars to normal clients and dialogs
 	-- { rule_any = { type = { "normal", "dialog" } }, properties = { titlebars_enabled = true } },
 
@@ -630,7 +697,7 @@ end)
 client.connect_signal("focus", function(c)
 	-- c.border_color = beautiful.border_focus
 	c.border_width = border_focus_width
-  c.border_color = border_focus_color
+	c.border_color = border_focus_color
 end)
 client.connect_signal("unfocus", function(c)
 	c.border_color = beautiful.border_normal
@@ -643,8 +710,13 @@ client.connect_signal("property::class", function(c)
 		c:move_to_tag(scratchpad)
 	end
 end)
-
-
+-- Element workaround (not actually sure if this is needed)
+client.connect_signal("property::class", function(c)
+	if c.class == "Element" then
+		local scratchpad = awful.tag.find_by_name(awful.screen.focused(), "scratch")
+		c:move_to_tag(scratchpad)
+	end
+end)
 
 -- }}}
 -- Hide wiboxes by default
@@ -655,13 +727,17 @@ for s in screen do
 	end
 end
 
-awful.spawn.with_shell("feh --bg-scale ~/Pictures/wallpapers/7.webp")
+awful.spawn.with_shell("feh --bg-scale ~/Pictures/wallpapers/4.jpg")
 awful.spawn.with_shell("xset r rate 320 25")
+awful.spawn.with_shell("picom")
+kbdcfg.switch_next()
 -- awful.tag.incmwfact(-0.05)
 
-beautiful.useless_gap = 3
+beautiful.useless_gap = 6
 scratchpad.start()
 
 -- Change scratchpad layout
 local scratchpad = awful.tag.find_by_name(awful.screen.focused(), "scratch")
 awful.layout.set(lain.layout.centerwork, scratchpad)
+
+--toggle_borders()

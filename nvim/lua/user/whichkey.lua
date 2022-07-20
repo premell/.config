@@ -3,6 +3,11 @@ if not status_ok then
 	return
 end
 
+
+-- My stuff
+-- keymap("n", "<leader>å", ":w<CR>:source % | echo 'sourced'<CR>", opts)
+-- keymap("n", "<leader>ä", ":w<CR>:source ~/.config/nvim/lua/user/luasnip.lua | echo 'snippets sourced'<CR>", opts)
+
 local setup = {
 	plugins = {
 		marks = true, -- shows a list of your marks on ' and `
@@ -92,13 +97,14 @@ local vmappings = {
 }
 local mappings = {
 	["a"] = { "<cmd>Alpha<cr>", "Alpha" },
-	["e"] = { "<cmd>NvimTreeToggle<cr>", "Explorer" },
+	--["e"] = { "<cmd>NvimTreeToggle<cr>", "Explorer" },
+	["e"] = { "<cmd>Neotree float reveal toggle<cr>", "Explorer" },
 	["/"] = { "<cmd>lua require('Comment.api').toggle_current_linewise()<CR>", "Comment" },
 	b = {
 		name = "Buffers",
-		j = { "<cmd>BufferLinePick<cr>", "Jump" },
-		f = { "<cmd>Telescope buffers<cr>", "Find" },
-		b = { "<cmd>BufferLineCyclePrev<cr>", "Previous" },
+		-- j = { "<cmd>BufferLinePick<cr>", "Jump" },
+		-- f = { "<cmd>Telescope buffers<cr>", "Find" },
+		b = { "<cmd>Neotree buffers toggle reveal float<cr>", "Buffers" },
 		e = {
 			"<cmd>BufferLineCloseLeft<cr><cmd>BufferLineCloseRight<cr>",
 			"Close all other buffers",
@@ -117,8 +123,6 @@ local mappings = {
 			"Sort by language",
 		},
 	},
-	["w"] = { "<cmd>w!<CR>", "Save" },
-	["q"] = { "<cmd>q!<CR>", "Quit" },
 	["c"] = { "<cmd>Bdelete!<CR>", "Close Buffer" },
 
 	h = {
@@ -134,15 +138,14 @@ local mappings = {
 	},
 	-- ["h"] = { "<cmd>nohlsearch<CR>", "No Highlight" },
 	["f"] = {
-		"<cmd>lua require('telescope.builtin').find_files()<cr>",
+		"<cmd>lua require('fzf-lua').files()<cr>",
 		"Find files",
 	},
-	["P"] = { "<cmd>lua require('telescope').extensions.projects.projects()<cr>", "Projects" },
-
+	-- ["P"] = { "<cmd>lua require('telescope').extensions.projects.projects()<cr>", "Projects" },
+	-- ["R"] = { "<cmd>lua require('betterw').BetterPrint()<CR>", "REFACTOR TESTING" },
+	-- ["T"] = { "<cmd>lua require('betterw').BetterPrint()<CR>", "REFACTOR TESTING" },
 	p = {
 		name = "Packer",
-		c = { "<cmd>PackerCompile<cr>", "Compile" },
-		i = { "<cmd>PackerInstall<cr>", "Install" },
 		s = { "<cmd>PackerSync<cr>", "Sync" },
 		S = { "<cmd>PackerStatus<cr>", "Status" },
 		u = { "<cmd>PackerUpdate<cr>", "Update" },
@@ -150,6 +153,7 @@ local mappings = {
 
 	g = {
 		name = "Git",
+		n = { "<cmd>Neogit<CR>", "Lazygit" },
 		g = { "<cmd>lua _LAZYGIT_TOGGLE()<CR>", "Lazygit" },
 		j = { "<cmd>lua require 'gitsigns'.next_hunk()<cr>", "Next Hunk" },
 		k = { "<cmd>lua require 'gitsigns'.prev_hunk()<cr>", "Prev Hunk" },
@@ -170,50 +174,74 @@ local mappings = {
 			"Diff",
 		},
 	},
-
 	l = {
 		name = "LSP",
-		a = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Action" },
+		--a = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Action" },
+		-- d = {
+		-- 	"<cmd>TroubleToggle document_diagnostics<cr>",
+		-- 	"Document Diagnostics",
+		-- },
+		-- w = {
+		-- 	"<cmd>TroubleToggle workspace_diagnostics<cr>",
+		-- 	"Workspace Diagnostics",
+		-- },
 		d = {
-			"<cmd>Telescope lsp_document_diagnostics<cr>",
+			"<cmd>lua vim.lsp.diagnostic.set_qflist()<cr>",
 			"Document Diagnostics",
-		},
-		w = {
-			"<cmd>Telescope lsp_workspace_diagnostics<cr>",
-			"Workspace Diagnostics",
 		},
 		f = { "<cmd>lua vim.lsp.buf.formatting()<cr>", "Format" },
 		i = { "<cmd>LspInfo<cr>", "Info" },
 		I = { "<cmd>LspInstallInfo<cr>", "Installer Info" },
-		j = {
-			"<cmd>lua vim.lsp.diagnostic.goto_next()<CR>",
-			"Next Diagnostic",
-		},
-		k = {
-			"<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>",
-			"Prev Diagnostic",
-		},
-		l = { "<cmd>lua vim.lsp.codelens.run()<cr>", "CodeLens Action" },
-		q = { "<cmd>lua vim.lsp.diagnostic.set_loclist()<cr>", "Quickfix" },
+		-- j = {
+		-- 	"<cmd>lua vim.lsp.diagnostic.goto_next()<CR>",
+		-- 	"Next Diagnostic",
+		-- },
+		-- k = {
+		-- 	"<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>",
+		-- 	"Prev Diagnostic",
+		-- },
+		-- l = { "<cmd>lua vim.lsp.codelens.run()<cr>", "CodeLens Action" },
+		-- q = { "<cmd>lua vim.lsp.diagnostic.set_qflist()<cr>", "Quickfix" },
 		r = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename" },
-		s = { "<cmd>Telescope lsp_document_symbols<cr>", "Document Symbols" },
-		S = {
-			"<cmd>Telescope lsp_dynamic_workspace_symbols<cr>",
-			"Workspace Symbols",
-		},
-	},
+		-- s = { "<cmd>Telescope lsp_document_symbols<cr>", "Document Symbols" },
+		-- S = {
+		-- 	"<cmd>Telescope lsp_dynamic_workspace_symbols<cr>",
+		-- 	"Workspace Symbols",
+		-- },
+},
 	s = {
 		name = "Search",
-		b = { "<cmd>Telescope git_branches<cr>", "Checkout branch" },
-		c = { "<cmd>Telescope colorscheme<cr>", "Colorscheme" },
-		h = { "<cmd>Telescope help_tags<cr>", "Find Help" },
-		M = { "<cmd>Telescope man_pages<cr>", "Man Pages" },
-		r = { "<cmd>Telescope oldfiles<cr>", "Open Recent File" },
-		t = { "<cmd>Telescope live_grep<cr>", "Text" },
-		R = { "<cmd>Telescope registers<cr>", "Registers" },
-		k = { "<cmd>Telescope keymaps<cr>", "Keymaps" },
-		C = { "<cmd>Telescope commands<cr>", "Commands" },
+		--b = { "<cmd>FzfLua buffers<cr>", "Buffers" },
+		c = { "<cmd>FzfLua colorschemes<cr>", "Colorscheme" },
+		--h = { "<cmd>FzfLua help_tags<cr>", "Find Help" },
+		--M = { "<cmd>FzfLua man_pages<cr>", "Man Pages" },
+		r = { "<cmd>FzfLua oldfiles<cr>", "Open Recent File" },
+		t = { "<cmd>FzfLua live_grep_native<cr>", "Text" },
+		--R = { "<cmd>FzfLua registers<cr>", "Registers" },
+		--k = { "<cmd>FzfLua keymaps<cr>", "Keymaps" },
+		--C = { "<cmd>FzfLua commands<cr>", "Commands" },
+		s = { "<cmd>FzfLua resume<cr>", "Resume" },
 	},
+		w = {
+			"<cmd>w<cr>",
+			"save",
+		},
+	r = {
+			"<cmd>source ~/.config/nvim/init.lua | source ~/.config/nvim/lua/user/luasnip.lua |  echo 'sourced'<CR>",
+			"resource nvim",
+		},
+  --
+  -- E = {
+  --   "<cmd>LuaSnipEdit<cr>",
+  --   "edit snippets"
+  -- }
+
+			--"<cmd>source ~/.config/nvim/init.lua | source ~/.config/nvim/plugin/packer_compiled.lua |  echo 'sourced'<CR>",
+
+
+--vim.keymap.set("n", "<Leader><CR>", "<cmd>LuaSnipEdit<cr>", { silent = true, noremap = true })
+
+
 }
 
 --t = { "<cmd>ToggleTerm direction=float<cr>", "Float" },

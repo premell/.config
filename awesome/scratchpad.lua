@@ -9,6 +9,7 @@ function scratchpad.start()
 	awful.spawn("spotify")
 	awful.spawn("discord")
 	awful.spawn("signal-desktop")
+	awful.spawn("element-desktop")
 	awful.spawn("sxiv ~/Pictures/wallpapers/1.jpg")
 	-- awful.spawn("alacritty -e lvim notes", {
 	-- 	tag = scratchpad,

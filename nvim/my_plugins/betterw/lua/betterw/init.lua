@@ -17,4 +17,12 @@ M.BetterW = function()
 	end
 end
 
+vim.cmd([[
+  nnoremap w <cmd>lua require("betterw").BetterW()<CR>
+  onoremap w e
+  vnoremap w e
+  onoremap W E
+  vnoremap W E
+]])
+
 return M

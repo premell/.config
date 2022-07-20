@@ -7,27 +7,27 @@ cd ~/.config/nvim
 if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
+let s:shortmess_save = &shortmess
 set shortmess=aoO
-badd +24 init.lua
-badd +1 ~/.config/nvim/README.md
-badd +0 ~/.config/nvim/lua/user/alpha.lua
+badd +0 init.lua
 argglobal
 %argdel
-edit ~/.config/nvim/lua/user/alpha.lua
+$argadd init.lua
+edit init.lua
 argglobal
-balt ~/.config/nvim/README.md
-let s:l = 28 - ((27 * winheight(0) + 14) / 28)
+let s:l = 23 - ((22 * winheight(0) + 31) / 63)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 28
-normal! 0
+keepjumps 23
+normal! 02|
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
 endif
 unlet! s:wipebuf
-set winheight=1 winwidth=20 shortmess=oTOltcxnifF
+set winheight=1 winwidth=20
+let &shortmess = s:shortmess_save
 let s:sx = expand("<sfile>:p:r")."x.vim"
 if filereadable(s:sx)
   exe "source " . fnameescape(s:sx)
